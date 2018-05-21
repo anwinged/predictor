@@ -1,0 +1,19 @@
+#!/bin/bash
+
+mkdir -p var/docker-cache/.npm
+
+docker run \
+    --rm \
+    --interactive \
+    --tty \
+    --init \
+    --user "$UID:$(id -g)" \
+    --volume $PWD:/srv/app \
+    --volume $HOME:$HOME \
+    --volume $PWD/var/docker-cache/.npm:/tmp/.npm \
+	--expose=9000 \
+    --publish=9000:9000 \
+    --env npm_config_cache=/tmp/.npm \
+    --workdir /srv/app \
+    node:10 \
+    npm "$@"
