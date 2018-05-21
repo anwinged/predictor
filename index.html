@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Hello</title>
+    </head>
+    <body>
+        <main id="app" class="app">
+            <span class="score">
+                {{ predictor.score }}
+            </span>
+            <div class="buttons">
+                <button value="0" v-on:click="pass(0)">0</button>
+                <button value="1" v-on:click="pass(1)">1</button>
+            </div>
+        </main>
+        <script src="dist/app.js"></script>
+    </body>
+</html>
