@@ -1,23 +1,22 @@
+import Move from './Move';
+
 export default class Movements {
-    humanMovements = [];
-    robotMovements = [];
+    moves = [];
 
-    constructor(human = [], robot = []) {
-        this.humanMovements = human;
-        this.robotMovements = robot;
+    constructor(moves = []) {
+        this.moves = moves;
     }
 
-    makeHumanMove(value) {
-        this.humanMovements.push(value === 1 ? value : 0);
-    }
-
-    makeRobotMove(value) {
-        this.robotMovements.push(value === 1 ? value : 0);
+    makeMove(human, robot) {
+        this.moves.push(new Move(human, robot));
     }
 
     getLastMovements(humanCount, robotCount) {
-        const humanSlice = this.humanMovements.slice(-humanCount);
-        const robotSlice = this.robotMovements.slice(-robotCount);
-        return [].concat(robotSlice, humanSlice);
+        const humanMoves = this.moves.map(m => m.human);
+        const robotMoves = this.moves.map(m => m.robot);
+        return [].concat(
+            robotMoves.slice(-robotCount),
+            humanMoves.slice(-humanCount)
+        );
     }
 }

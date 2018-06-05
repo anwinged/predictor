@@ -47,8 +47,7 @@ test('Daemon 1-1', function() {
         // expect(d._getStepSlice(m)).toEqual(step_slice(steps));
         expect(robot).toEqual(step.robot);
         d.adjust(m, step.human, index + 1);
-        m.makeHumanMove(step.human);
-        m.makeRobotMove(step.robot);
+        m.makeMove(step.human, step.robot);
         console.log('Step', index + 1, d);
     });
 });
