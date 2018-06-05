@@ -8,6 +8,11 @@ test('Get prediction for beginning', function() {
     expect(d.predict(m)).toEqual(0);
 });
 
+test('Can get power', function() {
+    const d = new Daemon(5, 8);
+    expect(d.power).toEqual(13);
+});
+
 test('Daemon 1-1', function() {
     const m = new History();
     const d = new Daemon(1, 1);

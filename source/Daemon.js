@@ -16,29 +16,29 @@ export default class Daemon {
         this.epsilon = epsilon;
     }
 
+    get power() {
+        return this.humanCount + this.robotCount;
+    }
+
     predict(journal) {
         const steps = this._getStepSlice(journal);
         const w0 = this._getWeight([...steps, 0]);
         const w1 = this._getWeight([...steps, 1]);
 
-        if (w1 > w0) {
-            return 1;
-        } else {
-            return 0;
-        }
+        return w1 > w0 ? 1 : 0;
     }
 
-    adjust(movements, humanValue, stepNumber) {
-        const steps = this._getStepSlice(movements);
-        const weightAdjustment = this._getWeightAdjustment(stepNumber);
-        this._adjustWeight([...steps, humanValue], weightAdjustment);
+    adjust(journal, humanValue) {
+        const steps = this._getStepSlice(journal);
+        const adjustmentWeight = this._getAdjustmentWeight(journal.length);
+        this._adjustWeight([...steps, humanValue], adjustmentWeight);
     }
 
-    _getStepSlice(movements) {
-        return movements.getLastMovements(this.humanCount, this.robotCount);
+    _getStepSlice(journal) {
+        return journal.getLastMovements(this.humanCount, this.robotCount);
     }
 
-    _getWeightAdjustment(stepNumber) {
+    _getAdjustmentWeight(stepNumber) {
         return Math.pow(1 + this.epsilon, stepNumber);
     }
 
@@ -51,6 +51,7 @@ export default class Daemon {
     _setWeight(steps, value) {
         const key = create_key(steps);
         this.weights[key] = value;
+        console.log('WEIGHTS', this.weights);
     }
 
     _adjustWeight(steps, weight) {

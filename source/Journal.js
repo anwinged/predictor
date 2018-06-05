@@ -19,4 +19,8 @@ export default class Journal {
             humanMoves.slice(-humanCount)
         );
     }
+
+    get length() {
+        return this.moves.length;
+    }
 }
