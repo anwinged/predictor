@@ -16,8 +16,8 @@ export default class Daemon {
         this.epsilon = epsilon;
     }
 
-    predict(movements) {
-        const steps = this._getStepSlice(movements);
+    predict(journal) {
+        const steps = this._getStepSlice(journal);
         const w0 = this._getWeight([...steps, 0]);
         const w1 = this._getWeight([...steps, 1]);
 

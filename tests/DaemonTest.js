@@ -1,15 +1,15 @@
 import Daemon from '../source/Daemon';
 import expect from 'expect';
-import Movements from '../source/Movements';
+import History from '../source/Journal';
 
 test('Get prediction for beginning', function() {
-    const m = new Movements();
+    const m = new History();
     const d = new Daemon(1, 1);
     expect(d.predict(m)).toEqual(0);
 });
 
 test('Daemon 1-1', function() {
-    const m = new Movements();
+    const m = new History();
     const d = new Daemon(1, 1);
 
     const step_slice = s => {

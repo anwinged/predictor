@@ -1,6 +1,6 @@
 import Move from './Move';
 
-export default class Movements {
+export default class Journal {
     moves = [];
 
     constructor(moves = []) {

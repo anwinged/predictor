@@ -1,4 +1,4 @@
-import Movements from './Movements';
+import History from './Journal';
 import Supervisor from './Supervisor';
 
 export default class Predictor {
@@ -7,7 +7,7 @@ export default class Predictor {
     score = 0;
 
     constructor() {
-        this.movements = new Movements();
+        this.movements = new History();
         this.supervisor = new Supervisor();
     }
 }
