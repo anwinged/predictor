@@ -1,6 +1,6 @@
 import Vue from 'vue';
-import './style.css';
 import Predictor from './Predictor';
+import './style.css';
 
 new Vue({
     el: '#app',

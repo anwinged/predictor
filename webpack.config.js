@@ -6,7 +6,8 @@ module.exports = {
     entry: path.resolve(__dirname, 'source/index.js'),
     output: {
         filename: 'app.js',
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'web/dist'),
+        publicPath: 'dist/',
     },
     module: {
         rules: [
@@ -29,7 +30,8 @@ module.exports = {
         }
     },
     devServer: {
-        contentBase: path.resolve(__dirname, 'dist'),
+        contentBase: path.resolve(__dirname, 'web'),
+        index: 'index.html',
         host: "0.0.0.0",
         port: 9000,
     }
