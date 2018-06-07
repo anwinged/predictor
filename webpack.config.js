@@ -1,14 +1,7 @@
 const path = require('path');
+const merge = require('deepmerge');
 
-
-module.exports = {
-    mode: 'development',
-    entry: path.resolve(__dirname, 'source/index.js'),
-    output: {
-        filename: 'app.js',
-        path: path.resolve(__dirname, 'web/dist'),
-        publicPath: 'dist/',
-    },
+const baseConfig = {
     module: {
         rules: [
             {
@@ -24,6 +17,28 @@ module.exports = {
             },
         ]
     },
+};
+
+const buildConfig = {
+    mode: 'production',
+    entry: path.resolve(__dirname, 'source/build.js'),
+    output: {
+        filename: 'predictor.js',
+        path: path.resolve(__dirname, 'lib'),
+        library: 'predictor',
+        libraryTarget: 'umd',
+        umdNamedDefine: true
+    },
+};
+
+const devConfig = {
+    mode: 'development',
+    entry: path.resolve(__dirname, 'source/index.js'),
+    output: {
+        filename: 'app.js',
+        path: path.resolve(__dirname, 'web/dist'),
+        publicPath: 'dist/',
+    },
     resolve: {
         alias: {
             'vue$': 'vue/dist/vue.esm.js'
@@ -36,3 +51,8 @@ module.exports = {
         port: 9000,
     }
 };
+
+module.exports = merge(
+    baseConfig,
+    process.env.WEBPACK_ENV === 'build' ? buildConfig : devConfig
+);

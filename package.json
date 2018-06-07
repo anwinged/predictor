@@ -1,11 +1,12 @@
 {
-  "name": "app",
+  "name": "predictor",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "module": "lib/predictor.js",
   "scripts": {
     "test": "jest",
-    "build": "webpack",
+    "build:dev": "webpack",
+    "build": "WEBPACK_ENV=build webpack",
     "start:dev": "webpack-dev-server",
     "format": "prettier --tab-width=4 --single-quote --trailing-comma es5 --write '{source,tests}/**/*.js'"
   },
@@ -20,6 +21,7 @@
     "babel-preset-env": "^1.6.1",
     "bable-loader": "0.0.1-security",
     "css-loader": "^0.28.11",
+    "deepmerge": "^2.1.1",
     "jest": "^22.4.4",
     "prettier": "^1.12.1",
     "sass-loader": "^7.0.1",

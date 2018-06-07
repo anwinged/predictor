@@ -5,7 +5,13 @@ import Predictor from './Predictor';
 new Vue({
     el: '#app',
     data: {
-        predictor: new Predictor(),
+        predictor: new Predictor({
+            daemons: [
+                { human: 3, robot: 3 },
+                { human: 4, robot: 4 },
+                { human: 5, robot: 5 },
+            ],
+        }),
     },
     methods: {
         click(v) {
