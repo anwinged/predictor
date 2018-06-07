@@ -7,10 +7,17 @@ export default class Predictor {
     journal;
     supervisor;
 
-    constructor() {
+    constructor(config) {
         this.score = 0;
         this.journal = new Journal();
-        this.supervisor = new Supervisor([new Daemon(3, 3)]);
+        const daemons = config.daemons.map(daemonConfig => {
+            return new Daemon(
+                daemonConfig.human,
+                daemonConfig.robot,
+                daemonConfig.epsilon || 0.01
+            );
+        });
+        this.supervisor = new Supervisor(daemons, config.epsilon || 0.01);
     }
 
     pass(value) {
