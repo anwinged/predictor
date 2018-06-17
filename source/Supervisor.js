@@ -19,8 +19,6 @@ export default class Supervisor {
         const predictions = this._createPredictions(journal);
         const ordered = this._sortPredictions(predictions);
 
-        console.log(ordered);
-
         return ordered[0].value;
     }
 

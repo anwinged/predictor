@@ -51,7 +51,6 @@ export default class Daemon {
     _setWeight(steps, value) {
         const key = create_key(steps);
         this.weights[key] = value;
-        console.log('WEIGHTS', this.weights);
     }
 
     _adjustWeight(steps, weight) {
