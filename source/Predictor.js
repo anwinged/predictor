@@ -38,4 +38,8 @@ export default class Predictor {
         this.journal.makeMove(value, prediction);
         return prediction;
     }
+
+    stepCount() {
+        return this.journal.length;
+    }
 }

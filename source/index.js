@@ -24,7 +24,8 @@ new Vue({
         },
         pass(value) {
             const prediction = this.predictor.pass(value);
-            console.log('PREDICTED', prediction, 'PASS', value);
+            const step = this.predictor.stepCount();
+            console.log('STEP', step, 'PREDICTED', prediction, 'PASS', value);
         },
     },
 });
