@@ -1,14 +1,15 @@
-export default class Move {
+/**
+ * Represents one game move.
+ */
+class Move {
+    /**
+     * @param {Number} human
+     * @param {Number} robot
+     */
     constructor(human, robot) {
-        this._human = human ? 1 : 0;
-        this._robot = robot ? 1 : 0;
-    }
-
-    get human() {
-        return this._human;
-    }
-
-    get robot() {
-        return this._robot;
+        this.human = human;
+        this.robot = robot;
     }
 }
+
+export default Move;

@@ -1,21 +1,21 @@
-import Daemon from '../source/Daemon';
 import expect from 'expect';
-import History from '../source/Journal';
+import Daemon from '../source/Daemon';
+import Journal from '../source/Journal';
 
 test('Get prediction for beginning', function() {
-    const m = new History();
-    const d = new Daemon(1, 1);
+    const m = new Journal();
+    const d = new Daemon(2, 1, 1);
     expect(d.predict(m)).toEqual(0);
 });
 
 test('Can get power', function() {
-    const d = new Daemon(5, 8);
+    const d = new Daemon(2, 5, 8);
     expect(d.power).toEqual(13);
 });
 
 test('Daemon 1-1', function() {
-    const m = new History();
-    const d = new Daemon(1, 1);
+    const m = new Journal();
+    const d = new Daemon(2, 1, 1);
 
     const steps = [
         {
@@ -40,11 +40,10 @@ test('Daemon 1-1', function() {
         },
     ];
 
-    steps.forEach((step, index) => {
+    steps.forEach(step => {
         const prediction = d.predict(m);
         expect(prediction).toEqual(step.prediction);
-        d.adjust(m, step.human, index + 1);
+        d.adjust(m, step.human);
         m.makeMove(step.human, step.prediction);
-        console.log('Step', index + 1, d);
     });
 });

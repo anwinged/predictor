@@ -6,6 +6,7 @@ new Vue({
     el: '#app',
     data: {
         predictor: new Predictor({
+            base: 3,
             daemons: [
                 { human: 3, robot: 3 },
                 { human: 4, robot: 4 },
@@ -15,11 +16,11 @@ new Vue({
     },
     methods: {
         click(v) {
-            const value = v ? 1 : 0;
+            const value = parseInt(v, 10);
             this.pass(value);
         },
         press(evt) {
-            const value = evt.key === '1' ? 0 : 1;
+            const value = parseInt(evt.key, 10) - 1;
             this.pass(value);
         },
         pass(value) {

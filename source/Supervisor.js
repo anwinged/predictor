@@ -1,11 +1,22 @@
 const DEFAULT_EPSILON = 0.01;
 
-export default class Supervisor {
+class Supervisor {
+    /**
+     * @type {{daemon: Daemon, rate: Number}[]}
+     */
     daemons = [];
+
+    /**
+     * @type {Number}
+     */
     epsilon;
 
+    /**
+     * @param {Daemon[]} daemons
+     * @param {Number} epsilon
+     */
     constructor(daemons, epsilon = DEFAULT_EPSILON) {
-        if (!daemons) {
+        if (!daemons || daemons.length === 0) {
             throw Error('Empty daemon list');
         }
         this.daemons = daemons.map(daemon => ({
@@ -15,6 +26,11 @@ export default class Supervisor {
         this.epsilon = epsilon;
     }
 
+    /**
+     * @param {Journal} journal
+     *
+     * @returns {Number}
+     */
     predict(journal) {
         const predictions = this._createPredictions(journal);
         const ordered = this._sortPredictions(predictions);
@@ -22,6 +38,10 @@ export default class Supervisor {
         return ordered[0].value;
     }
 
+    /**
+     * @param {Journal} journal
+     * @param {Number} humanValue
+     */
     adjust(journal, humanValue) {
         const predictions = this._createPredictions(journal);
         for (const prediction of predictions) {
@@ -34,6 +54,13 @@ export default class Supervisor {
         }
     }
 
+    /**
+     * @param {Journal} journal
+     *
+     * @returns {Array}
+     *
+     * @private
+     */
     _createPredictions(journal) {
         return this.daemons.map(daemon => ({
             daemon: daemon,
@@ -43,6 +70,13 @@ export default class Supervisor {
         }));
     }
 
+    /**
+     * @param {Array} predictions
+     *
+     * @returns {Array}
+     *
+     * @private
+     */
     _sortPredictions(predictions) {
         return predictions.sort((result1, result2) => {
             const rateDiff = result2.rate - result1.rate;
@@ -53,7 +87,16 @@ export default class Supervisor {
         });
     }
 
+    /**
+     * @param {Number} stepNumber
+     *
+     * @returns {Number}
+     *
+     * @private
+     */
     _getAdjustmentWeight(stepNumber) {
         return Math.pow(1 + this.epsilon, stepNumber);
     }
 }
+
+export default Supervisor;

@@ -34,7 +34,9 @@
   "jest": {
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "**/source/*.js"
+      "**/source/**/*.js",
+      "!**/source/build.js",
+      "!**/source/index.js"
     ],
     "testMatch": [
       "**/tests/**/*.js"
