@@ -1,6 +1,11 @@
 #!/bin/bash
 
-mkdir -p var/docker-cache/.npm
+source .env
+
+HOST_CACHE_DIR=$PWD/var/docker-cache/.npm
+CONTAINER_CACHE_DIR=/tmp/.npm
+
+mkdir -p ${HOST_CACHE_DIR}
 
 docker run \
     --rm \
@@ -8,12 +13,12 @@ docker run \
     --tty \
     --init \
     --user "$UID:$(id -g)" \
-    --volume $PWD:/srv/app \
-    --volume $HOME:$HOME \
-    --volume $PWD/var/docker-cache/.npm:/tmp/.npm \
+    --volume "$PWD:/srv/app" \
+    --volume "$HOME:$HOME" \
+    --volume "${HOST_CACHE_DIR}:${CONTAINER_CACHE_DIR}" \
 	--expose=9000 \
     --publish=9000:9000 \
-    --env npm_config_cache=/tmp/.npm \
+    --env npm_config_cache="${CONTAINER_CACHE_DIR}" \
     --workdir /srv/app \
-    node:10 \
+    ${NODE_IMAGE} \
     npm "$@"
