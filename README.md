@@ -58,5 +58,5 @@ const sc = predictor.stepCount();
     tools/npm run test
 
 [algorithm]: https://sites.google.com/site/ltwood/projects/heshby/algorithm
-[demo]: http://vakhrushev.me/projects/predictor/
+[demo]: https://vakhrushev.me/articles/2019-05-01-predictor/
 [about]: https://sites.google.com/site/ltwood/projects/heshby
