@@ -1,11 +1,8 @@
+import Journal from './Journal';
+
 const DEFAULT_EPSILON = 0.01;
 
-/**
- * @param {Number[]} steps
- *
- * @returns {String}
- */
-function create_key(steps) {
+function create_key(steps: number[]): string {
     return steps.join(':');
 }
 
@@ -35,37 +32,29 @@ class Daemon {
      */
     weights = {};
 
-    /**
-     * @param {Number} base
-     * @param {Number} humanCount
-     * @param {Number} robotCount
-     * @param {Number} epsilon
-     */
-    constructor(base, humanCount, robotCount, epsilon = DEFAULT_EPSILON) {
+    constructor(
+        base: number,
+        humanCount: number,
+        robotCount: number,
+        epsilon: number = DEFAULT_EPSILON
+    ) {
         this.base = base;
         this.humanCount = humanCount;
         this.robotCount = robotCount;
         this.epsilon = epsilon;
     }
 
-    /**
-     * @returns {Number}
-     */
-    get power() {
+    get power(): number {
         return this.humanCount + this.robotCount;
     }
 
-    /**
-     * @param {Journal} journal
-     *
-     * @returns {Number}
-     */
-    predict(journal) {
+    predict(journal: Journal): number {
         const steps = this._getStepSlice(journal);
 
-        const proposals = [];
+        const proposals: number[] = [];
         for (let i = 0; i < this.base; ++i) {
-            proposals[i] = this._getWeight([...steps, i]);
+            const weight = this._getWeight([...steps, i]);
+            proposals.push(weight);
         }
 
         const maxWeight = Math.max(...proposals);
@@ -88,7 +77,7 @@ class Daemon {
      *
      * @returns {Number[]}
      */
-    _getStepSlice(journal) {
+    private _getStepSlice(journal) {
         return journal.getLastMovements(this.humanCount, this.robotCount);
     }
 
@@ -99,7 +88,7 @@ class Daemon {
      *
      * @private
      */
-    _getAdjustmentWeight(stepNumber) {
+    private _getAdjustmentWeight(stepNumber) {
         return Math.pow(1 + this.epsilon, stepNumber);
     }
 
@@ -110,10 +99,10 @@ class Daemon {
      *
      * @private
      */
-    _getWeight(steps) {
+    private _getWeight(steps: number[]): number {
         const key = create_key(steps);
         const weight = this.weights[key];
-        return weight === undefined ? 0 : weight;
+        return weight as number;
     }
 
     /**
@@ -124,7 +113,7 @@ class Daemon {
      *
      * @private
      */
-    _setWeight(steps, value) {
+    private _setWeight(steps, value) {
         const key = create_key(steps);
         this.weights[key] = value;
     }
@@ -135,7 +124,7 @@ class Daemon {
      *
      * @private
      */
-    _adjustWeight(steps, weight) {
+    private _adjustWeight(steps, weight) {
         const currentWeight = this._getWeight(steps);
         const newWeight = currentWeight + weight;
         this._setWeight(steps, newWeight);

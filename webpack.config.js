@@ -5,15 +5,10 @@ const baseConfig = {
     module: {
         rules: [
             {
-                test: /\.js$/,
-                exclude: /node_modules/,
+                test: /\.ts$/,
                 use: {
-                    loader: 'babel-loader',
+                    loader: 'ts-loader',
                 },
-            },
-            {
-                test: /\.css$/,
-                use: ['style-loader', 'css-loader'],
             },
         ]
     },
@@ -21,35 +16,32 @@ const baseConfig = {
 
 const buildConfig = {
     mode: 'production',
-    entry: path.resolve(__dirname, 'source/build.js'),
+    entry: path.resolve(__dirname, 'src/index.ts'),
     output: {
-        filename: 'predictor.js',
-        path: path.resolve(__dirname, 'lib'),
+        filename: 'predictor.min.js',
+        path: path.resolve(__dirname, 'built'),
         library: 'predictor',
         libraryTarget: 'umd',
         umdNamedDefine: true
+    },
+    resolve: {
+        extensions: ['.ts', '.js']
     },
 };
 
 const devConfig = {
     mode: 'development',
-    entry: path.resolve(__dirname, 'source/index.js'),
+    entry: path.resolve(__dirname, 'src/index.ts'),
     output: {
-        filename: 'app.js',
-        path: path.resolve(__dirname, 'web/dist'),
-        publicPath: 'dist/',
+        filename: 'predictor.js',
+        path: path.resolve(__dirname, 'built'),
+        library: 'predictor',
+        libraryTarget: 'umd',
+        umdNamedDefine: true
     },
     resolve: {
-        alias: {
-            'vue$': 'vue/dist/vue.esm.js'
-        }
+        extensions: ['.ts', '.js']
     },
-    devServer: {
-        contentBase: path.resolve(__dirname, 'web'),
-        index: 'index.html',
-        host: "0.0.0.0",
-        port: 9000,
-    }
 };
 
 module.exports = merge(

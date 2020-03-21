@@ -1,28 +1,23 @@
+import Journal from './Journal';
+import Daemon from './Daemon';
+
 const DEFAULT_EPSILON = 0.01;
 
 class Supervisor {
-    /**
-     * @type {{daemon: Daemon, rate: Number}[]}
-     */
-    daemons = [];
+    daemons: { daemon: Daemon; rate: number }[] = [];
 
-    /**
-     * @type {Number}
-     */
-    epsilon;
+    readonly epsilon: number;
 
-    /**
-     * @param {Daemon[]} daemons
-     * @param {Number} epsilon
-     */
-    constructor(daemons, epsilon = DEFAULT_EPSILON) {
+    constructor(daemons: Daemon[], epsilon: number = DEFAULT_EPSILON) {
         if (!daemons || daemons.length === 0) {
             throw Error('Empty daemon list');
         }
+
         this.daemons = daemons.map(daemon => ({
             daemon: daemon,
             rate: 0,
         }));
+
         this.epsilon = epsilon;
     }
 
@@ -31,7 +26,7 @@ class Supervisor {
      *
      * @returns {Number}
      */
-    predict(journal) {
+    predict(journal: Journal): number {
         const predictions = this._createPredictions(journal);
         const ordered = this._sortPredictions(predictions);
 
@@ -42,7 +37,7 @@ class Supervisor {
      * @param {Journal} journal
      * @param {Number} humanValue
      */
-    adjust(journal, humanValue) {
+    adjust(journal: Journal, humanValue) {
         const predictions = this._createPredictions(journal);
         for (const prediction of predictions) {
             if (prediction.value === humanValue) {
@@ -61,7 +56,7 @@ class Supervisor {
      *
      * @private
      */
-    _createPredictions(journal) {
+    private _createPredictions(journal: Journal) {
         return this.daemons.map(daemon => ({
             daemon: daemon,
             power: daemon.daemon.power,
@@ -77,7 +72,7 @@ class Supervisor {
      *
      * @private
      */
-    _sortPredictions(predictions) {
+    private _sortPredictions(predictions) {
         return predictions.sort((result1, result2) => {
             const rateDiff = result2.rate - result1.rate;
             if (Math.abs(rateDiff) > 0.000001) {
@@ -87,14 +82,7 @@ class Supervisor {
         });
     }
 
-    /**
-     * @param {Number} stepNumber
-     *
-     * @returns {Number}
-     *
-     * @private
-     */
-    _getAdjustmentWeight(stepNumber) {
+    private _getAdjustmentWeight(stepNumber: number): number {
         return Math.pow(1 + this.epsilon, stepNumber);
     }
 }

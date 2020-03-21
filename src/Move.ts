@@ -2,11 +2,11 @@
  * Represents one game move.
  */
 class Move {
-    /**
-     * @param {Number} human
-     * @param {Number} robot
-     */
-    constructor(human, robot) {
+    public human: number;
+
+    public robot: number;
+
+    constructor(human: number, robot: number) {
         this.human = human;
         this.robot = robot;
     }
