@@ -19,7 +19,8 @@ jobs:
       - run: npm run build
       - run: npm run build:dev
       - run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
-      - run: npm publish --tag "${CIRCLE_TAG}" --access public
+      - run: npm version --no-git-tag-version --force "${CIRCLE_TAG}"
+      - run: npm publish --access public
 
 workflows:
   version: 2
