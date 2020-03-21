@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  test_and_publish:
+  test:
     docker:
       - image: node:12.16-alpine
     steps:
@@ -9,11 +9,28 @@ jobs:
       - run: npm ci
       - run: npm run format-check
       - run: npm run test
+
+  build_and_publish:
+    docker:
+      - image: node:12.16-alpine
+    steps:
+      - checkout
+      - run: npm ci
       - run: npm run build
       - run: npm run build:dev
+      - run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
+      - run: npm publish --tag "${CIRCLE_TAG}" --access public
 
 workflows:
   version: 2
   test_and_publish:
     jobs:
-      - test_and_publish
+      - test
+      - build_and_publish:
+          requires:
+            - test
+          filters:
+            tags:
+              only: /^\d+\.\d+\.\d+$/
+            branches:
+              ignore: /.*/
