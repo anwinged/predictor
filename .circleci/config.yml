@@ -25,7 +25,10 @@ workflows:
   version: 2
   test_and_publish:
     jobs:
-      - test
+      - test:
+          filters:
+            tags:
+              only: /.*/
       - build_and_publish:
           requires:
             - test
