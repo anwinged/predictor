@@ -13,8 +13,10 @@
     "test": "mocha",
     "coverage": "nyc mocha",
     "build:dev": "webpack",
-    "build": "WEBPACK_ENV=build webpack",
+    "build": "webpack --env.production",
     "format": "prettier --tab-width=4 --single-quote --trailing-comma es5 --write '{src,tests}/**/*.{ts,js}'",
+    "format-check": "prettier --tab-width=4 --single-quote --trailing-comma es5 --check '{src,tests}/**/*.{ts,js}'",
+    "format-wp": "prettier --tab-width=4 --single-quote --trailing-comma es5 --write 'webpack.config.js'",
     "format-md": "prettier --write './*.md'"
   },
   "devDependencies": {
@@ -22,7 +24,6 @@
     "@types/mocha": "^7.0.2",
     "@types/node": "^13.9.2",
     "chai": "^4.2.0",
-    "deepmerge": "^2.2.1",
     "mocha": "^7.1.1",
     "nyc": "^15.0.0",
     "prettier": "^1.19.1",
