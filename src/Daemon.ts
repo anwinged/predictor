@@ -7,30 +7,15 @@ function create_key(steps: number[]): string {
 }
 
 class Daemon {
-    /**
-     * @type {Number}
-     */
-    base;
+    base: number;
 
-    /**
-     * @type {Number}
-     */
-    humanCount;
+    humanCount: number;
 
-    /**
-     * @type {Number}
-     */
-    robotCount;
+    robotCount: number;
 
-    /**
-     * @type {Number}
-     */
-    epsilon;
+    epsilon: number;
 
-    /**
-     * @type {Object}
-     */
-    weights = {};
+    weights: { [key: string]: number } = {};
 
     constructor(
         base: number,
@@ -62,69 +47,31 @@ class Daemon {
         return proposals.indexOf(maxWeight);
     }
 
-    /**
-     * @param {Journal} journal
-     * @param {Number} humanValue
-     */
-    adjust(journal, humanValue) {
+    adjust(journal: Journal, humanValue: number) {
         const steps = this._getStepSlice(journal);
         const adjustmentWeight = this._getAdjustmentWeight(journal.length);
         this._adjustWeight([...steps, humanValue], adjustmentWeight);
     }
 
-    /**
-     * @param {Journal} journal
-     *
-     * @returns {Number[]}
-     */
-    private _getStepSlice(journal) {
+    private _getStepSlice(journal: Journal): number[] {
         return journal.getLastMovements(this.humanCount, this.robotCount);
     }
 
-    /**
-     * @param {Number} stepNumber
-     *
-     * @returns {Number}
-     *
-     * @private
-     */
-    private _getAdjustmentWeight(stepNumber) {
+    private _getAdjustmentWeight(stepNumber: number): number {
         return Math.pow(1 + this.epsilon, stepNumber);
     }
 
-    /**
-     * @param {Number[]} steps
-     *
-     * @returns {Number}
-     *
-     * @private
-     */
     private _getWeight(steps: number[]): number {
         const key = create_key(steps);
-        const weight = this.weights[key];
-        return weight as number;
+        return key in this.weights ? this.weights[key] : 0;
     }
 
-    /**
-     * @param {Number[]} steps
-     * @param {Number} value
-     *
-     * @returns {Number}
-     *
-     * @private
-     */
-    private _setWeight(steps, value) {
+    private _setWeight(steps: number[], value: number): void {
         const key = create_key(steps);
         this.weights[key] = value;
     }
 
-    /**
-     * @param {Number[]} steps
-     * @param {Number} weight
-     *
-     * @private
-     */
-    private _adjustWeight(steps, weight) {
+    private _adjustWeight(steps: number[], weight: number): void {
         const currentWeight = this._getWeight(steps);
         const newWeight = currentWeight + weight;
         this._setWeight(steps, newWeight);

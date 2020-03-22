@@ -21,11 +21,6 @@ class Supervisor {
         this.epsilon = epsilon;
     }
 
-    /**
-     * @param {Journal} journal
-     *
-     * @returns {Number}
-     */
     predict(journal: Journal): number {
         const predictions = this._createPredictions(journal);
         const ordered = this._sortPredictions(predictions);
@@ -33,10 +28,6 @@ class Supervisor {
         return ordered[0].value;
     }
 
-    /**
-     * @param {Journal} journal
-     * @param {Number} humanValue
-     */
     adjust(journal: Journal, humanValue) {
         const predictions = this._createPredictions(journal);
         for (const prediction of predictions) {

@@ -4,13 +4,18 @@ set -eu
 
 source .env
 
+TTY=
+if [ -t 1 ] ; then
+	TTY=--tty
+fi
+
 docker run \
     --rm \
     --interactive \
-    --tty \
+    ${TTY} \
     --init \
     --user "$(id -u):$(id -g)" \
-    --volume "$PWD:/srv/app" \
-    --workdir /srv/app \
+    --volume "$PWD:/app" \
+    --workdir /app \
     ${NODE_IMAGE} \
     node "$@"

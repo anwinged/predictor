@@ -10,7 +10,7 @@ docker run \
     --tty \
     --init \
     --user "$(id -u):$(id -g)" \
-    --volume "$PWD:/srv/app" \
-    --workdir /srv/app \
+    --volume "$PWD:/app" \
+    --workdir /app \
     ${NODE_IMAGE} \
     ./node_modules/.bin/tsc "$@"

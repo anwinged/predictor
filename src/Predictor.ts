@@ -18,22 +18,22 @@ export default class Predictor {
     /**
      * @type {Number}
      */
-    base;
+    base: number;
 
     /**
      * @type {Number}
      */
-    score;
+    score: number;
 
     /**
      * @type {Journal}
      */
-    journal;
+    journal: Journal;
 
     /**
      * @type {Supervisor}
      */
-    supervisor;
+    supervisor: Supervisor;
 
     /**
      * @param {Object} config
@@ -46,13 +46,8 @@ export default class Predictor {
         this.supervisor = new Supervisor(daemons, config.supervisor_epsilon);
     }
 
-    /**
-     * @param {Number|String} humanValue
-     *
-     * @returns {Number}
-     */
-    pass(humanValue) {
-        const value = parseInt(humanValue, 10);
+    pass(humanValue: number): number {
+        const value = humanValue;
         if (value < 0 || value >= this.base) {
             throw new Error(`Passed value must be in [0, ${this.base})`);
         }
@@ -70,7 +65,7 @@ export default class Predictor {
      *
      * @private
      */
-    _createDaemons(daemonConfigs) {
+    private _createDaemons(daemonConfigs) {
         return daemonConfigs.map(config => {
             return new Daemon(
                 this.base,
@@ -81,10 +76,7 @@ export default class Predictor {
         });
     }
 
-    /**
-     * @returns {Number}
-     */
-    stepCount() {
+    stepCount(): number {
         return this.journal.length;
     }
 }

@@ -3,7 +3,6 @@
  */
 class Move {
     public human: number;
-
     public robot: number;
 
     constructor(human: number, robot: number) {
