@@ -4,7 +4,7 @@
   "description": "",
   "author": "Anton Vakhrushev",
   "license": "MIT",
-  "main": "built/predictor.js",
+  "main": "dist/predictor.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/anwinged/predictor.git"
