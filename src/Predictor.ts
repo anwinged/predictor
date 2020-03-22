@@ -2,7 +2,19 @@ import Daemon from './Daemon';
 import Journal from './Journal';
 import Supervisor from './Supervisor';
 
-const DEFAULT_CONFIG = {
+interface DaemonConfig {
+    human: number;
+    robot: number;
+    epsilon: number;
+}
+
+interface PredictorConfig {
+    base: number;
+    supervisor_epsilon: number;
+    daemons: DaemonConfig[];
+}
+
+const DEFAULT_CONFIG: PredictorConfig = {
     base: 2,
     supervisor_epsilon: 0.01,
     daemons: [
@@ -35,10 +47,7 @@ export default class Predictor {
      */
     supervisor: Supervisor;
 
-    /**
-     * @param {Object} config
-     */
-    constructor(config = DEFAULT_CONFIG) {
+    constructor(config: PredictorConfig = DEFAULT_CONFIG) {
         this.base = config.base;
         this.score = 0;
         this.journal = new Journal();
@@ -47,25 +56,17 @@ export default class Predictor {
     }
 
     pass(humanValue: number): number {
-        const value = humanValue;
-        if (value < 0 || value >= this.base) {
+        if (humanValue < 0 || humanValue >= this.base) {
             throw new Error(`Passed value must be in [0, ${this.base})`);
         }
         const prediction = this.supervisor.predict(this.journal);
-        this.score += prediction === value ? -1 : 1;
-        this.supervisor.adjust(this.journal, value);
-        this.journal.makeMove(value, prediction);
+        this.score += prediction === humanValue ? -1 : 1;
+        this.supervisor.adjust(this.journal, humanValue);
+        this.journal.makeMove(humanValue, prediction);
         return prediction;
     }
 
-    /**
-     * @param {Object} daemonConfigs
-     *
-     * @returns {Daemon[]}
-     *
-     * @private
-     */
-    private _createDaemons(daemonConfigs) {
+    private _createDaemons(daemonConfigs: DaemonConfig[]): Daemon[] {
         return daemonConfigs.map(config => {
             return new Daemon(
                 this.base,

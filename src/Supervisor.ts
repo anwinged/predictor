@@ -3,8 +3,20 @@ import Daemon from './Daemon';
 
 const DEFAULT_EPSILON = 0.01;
 
+interface DaemonRate {
+    daemon: Daemon;
+    rate: number;
+}
+
+interface Prediction {
+    daemonRate: DaemonRate;
+    rate: number;
+    power: number;
+    value: number;
+}
+
 class Supervisor {
-    daemons: { daemon: Daemon; rate: number }[] = [];
+    daemonRates: DaemonRate[] = [];
 
     readonly epsilon: number;
 
@@ -13,7 +25,7 @@ class Supervisor {
             throw Error('Empty daemon list');
         }
 
-        this.daemons = daemons.map(daemon => ({
+        this.daemonRates = daemons.map(daemon => ({
             daemon: daemon,
             rate: 0,
         }));
@@ -28,43 +40,29 @@ class Supervisor {
         return ordered[0].value;
     }
 
-    adjust(journal: Journal, humanValue) {
+    adjust(journal: Journal, humanValue: number) {
         const predictions = this._createPredictions(journal);
         for (const prediction of predictions) {
             if (prediction.value === humanValue) {
-                prediction.daemon.rate += this._getAdjustmentWeight(
+                prediction.daemonRate.rate += this._getAdjustmentWeight(
                     journal.length
                 );
             }
-            prediction.daemon.daemon.adjust(journal, humanValue);
+            prediction.daemonRate.daemon.adjust(journal, humanValue);
         }
     }
 
-    /**
-     * @param {Journal} journal
-     *
-     * @returns {Array}
-     *
-     * @private
-     */
-    private _createPredictions(journal: Journal) {
-        return this.daemons.map(daemon => ({
-            daemon: daemon,
-            power: daemon.daemon.power,
-            rate: daemon.rate,
-            value: daemon.daemon.predict(journal),
+    private _createPredictions(journal: Journal): Prediction[] {
+        return this.daemonRates.map(daemonRate => ({
+            daemonRate: daemonRate,
+            power: daemonRate.daemon.power,
+            rate: daemonRate.rate,
+            value: daemonRate.daemon.predict(journal),
         }));
     }
 
-    /**
-     * @param {Array} predictions
-     *
-     * @returns {Array}
-     *
-     * @private
-     */
-    private _sortPredictions(predictions) {
-        return predictions.sort((result1, result2) => {
+    private _sortPredictions(predictions: Prediction[]) {
+        return predictions.sort((result1: Prediction, result2: Prediction) => {
             const rateDiff = result2.rate - result1.rate;
             if (Math.abs(rateDiff) > 0.000001) {
                 return rateDiff;

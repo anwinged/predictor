@@ -47,7 +47,7 @@ class Daemon {
         return proposals.indexOf(maxWeight);
     }
 
-    adjust(journal: Journal, humanValue: number) {
+    adjust(journal: Journal, humanValue: number): void {
         const steps = this._getStepSlice(journal);
         const adjustmentWeight = this._getAdjustmentWeight(journal.length);
         this._adjustWeight([...steps, humanValue], adjustmentWeight);
