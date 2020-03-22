@@ -1,5 +1,7 @@
 # Электронная гадалка
 
+[![CircleCI](https://circleci.com/gh/anwinged/predictor/tree/master.svg?style=svg)](https://circleci.com/gh/anwinged/predictor/tree/master)
+
 [Демоверсия][demo]
 
 Алгоритм, который противостоит человеку, и на основе ходов пытается предсказать
