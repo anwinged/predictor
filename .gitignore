@@ -3,5 +3,6 @@
 built/
 coverage/
 node_modules/
+test-results/
 var/
 .npmrc

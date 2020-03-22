@@ -8,7 +8,9 @@ jobs:
       - checkout
       - run: npm ci
       - run: npm run format-check
-      - run: npm run test
+      - run: npm run test:junit-report
+      - store_test_results:
+          path: test-results
 
   build_and_publish:
     docker:
