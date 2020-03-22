@@ -1,32 +1,40 @@
 import Journal from './Journal';
 
-const DEFAULT_EPSILON = 0.01;
-
 function create_key(steps: number[]): string {
     return steps.join(':');
 }
 
 class Daemon {
-    base: number;
+    static DEFAULT_EPSILON = 0.01;
 
-    humanCount: number;
+    private readonly thisId: string;
 
-    robotCount: number;
+    private readonly base: number;
 
-    epsilon: number;
+    private readonly humanCount: number;
 
-    weights: { [key: string]: number } = {};
+    private readonly robotCount: number;
+
+    private readonly epsilon: number;
+
+    private weights: { [key: string]: number } = {};
 
     constructor(
+        id: string,
         base: number,
         humanCount: number,
         robotCount: number,
-        epsilon: number = DEFAULT_EPSILON
+        epsilon: number = Daemon.DEFAULT_EPSILON
     ) {
+        this.thisId = id;
         this.base = base;
         this.humanCount = humanCount;
         this.robotCount = robotCount;
         this.epsilon = epsilon;
+    }
+
+    get id(): string {
+        return this.thisId;
     }
 
     get power(): number {
@@ -51,6 +59,10 @@ class Daemon {
         const steps = this._getStepSlice(journal);
         const adjustmentWeight = this._getAdjustmentWeight(journal.length);
         this._adjustWeight([...steps, humanValue], adjustmentWeight);
+    }
+
+    getWeights() {
+        return { ...this.weights };
     }
 
     private _getStepSlice(journal: Journal): number[] {

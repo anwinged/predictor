@@ -7,7 +7,10 @@ import Journal from '../src/Journal';
 
 describe('Supervisor', function() {
     it('Get prediction for one daemon state', function() {
-        const supervisor = new Supervisor([new Daemon(2, 1, 1, 0.01)], 0.01);
+        const supervisor = new Supervisor(
+            [new Daemon('d1', 2, 1, 1, 0.1)],
+            0.1
+        );
         const journal = new Journal();
 
         const human1 = 1;
@@ -26,5 +29,7 @@ describe('Supervisor', function() {
 
         journal.makeMove(human2, predicted1);
         supervisor.adjust(journal, human2);
+
+        expect({ d1: 1.1 ** 2 }).to.eqls(supervisor.rates());
     });
 });

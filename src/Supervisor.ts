@@ -1,8 +1,6 @@
 import Journal from './Journal';
 import Daemon from './Daemon';
 
-const DEFAULT_EPSILON = 0.01;
-
 interface DaemonRate {
     daemon: Daemon;
     rate: number;
@@ -16,11 +14,16 @@ interface Prediction {
 }
 
 class Supervisor {
+    static DEFAULT_EPSILON = 0.01;
+
     daemonRates: DaemonRate[] = [];
 
     readonly epsilon: number;
 
-    constructor(daemons: Daemon[], epsilon: number = DEFAULT_EPSILON) {
+    constructor(
+        daemons: Daemon[],
+        epsilon: number = Supervisor.DEFAULT_EPSILON
+    ) {
         if (!daemons || daemons.length === 0) {
             throw Error('Empty daemon list');
         }
@@ -50,6 +53,22 @@ class Supervisor {
             }
             prediction.daemonRate.daemon.adjust(journal, humanValue);
         }
+    }
+
+    rates() {
+        const result = {};
+        this.daemonRates.forEach(r => {
+            result[r.daemon.id] = r.rate;
+        });
+        return result;
+    }
+
+    weights() {
+        const result = {};
+        this.daemonRates.forEach(r => {
+            result[r.daemon.id] = r.daemon.getWeights();
+        });
+        return result;
     }
 
     private _createPredictions(journal: Journal): Prediction[] {

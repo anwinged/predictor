@@ -2,12 +2,20 @@
  * Represents one game move.
  */
 class Move {
-    public human: number;
-    public robot: number;
+    private readonly itsHuman: number;
+    private readonly itsRobot: number;
 
     constructor(human: number, robot: number) {
-        this.human = human;
-        this.robot = robot;
+        this.itsHuman = human;
+        this.itsRobot = robot;
+    }
+
+    get human() {
+        return this.itsHuman;
+    }
+
+    get robot() {
+        return this.itsRobot;
     }
 }
 
